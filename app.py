@@ -17,6 +17,10 @@ import uvicorn
 import traceback
 from dotenv import load_dotenv
 # testing the new code 
+from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
+
 app = FastAPI()
 
 class QueryRequest(BaseModel):
@@ -26,6 +30,7 @@ class QueryRequest(BaseModel):
 @app.post("/")
 async def query(request: QueryRequest):
     return {"response": f"Received question: {request.question}"}
+
 #test ends here
 
 # Configure logging
