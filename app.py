@@ -7,15 +7,17 @@ app = FastAPI()
 async def handle_request(request: Request):
     data = await request.json()
 
-    # Extract question from OpenAI-like message format
-    question = data.get("messages", [{}])[-1].get("content", "No question provided.")
+    # OpenAI-style message format
+    messages = data.get("messages", [])
+    question = messages[-1].get("content", "No question provided.") if messages else "No question provided."
 
-    # Your custom logic
-    answer = f"This is an answer to: {question}\n\nLinks: https://dummyimage.com/"
+    # Dummy response logic
+    link = "https://dummyimage.com/"
+    answer = f"This is an answer to: {question}\n\nLinks: {link}"
 
-    # Important: include both .answer and OpenAI-style .choices
     return JSONResponse({
         "answer": answer,
+        "links": [link],
         "choices": [
             {
                 "message": {
