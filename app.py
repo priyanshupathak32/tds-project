@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# Allow CORS (optional but helpful for browser testing)
+# Optional: Allow CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -12,12 +12,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dummy answer generation function (replace this with your real logic)
+# Replace with your actual logic
 def generate_answer(question: str) -> str:
-    # You can call your own LLM logic here
     return f"This is an answer to: {question}\n\nLinks: https://dummyimage.com/"
 
-# Main route that mimics OpenAI's API
 @app.post("/")
 async def openai_compatible_route(request: Request):
     try:
@@ -25,11 +23,12 @@ async def openai_compatible_route(request: Request):
         messages = data.get("messages", [])
         user_message = messages[-1]["content"] if messages else "No question provided."
 
-        # Call your answer-generation logic
+        # Generate answer
         answer = generate_answer(user_message)
 
-        # Return response in OpenAI format
+        # Return both "answer" and OpenAI-style "choices"
         return JSONResponse({
+            "answer": answer,  # ✅ Added top-level "answer"
             "choices": [
                 {
                     "message": {
