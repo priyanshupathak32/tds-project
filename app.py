@@ -16,6 +16,17 @@ from fastapi.responses import JSONResponse
 import uvicorn
 import traceback
 from dotenv import load_dotenv
+# testing the new code 
+app = FastAPI()
+
+class QueryRequest(BaseModel):
+    question: str
+    image: Optional[str] = None
+
+@app.post("/")
+async def query(request: QueryRequest):
+    return {"response": f"Received question: {request.question}"}
+#test ends here
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
